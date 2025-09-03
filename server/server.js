@@ -35,11 +35,11 @@ app.use(passport.session());
 
 // CORS <- needed for render deployment
 app.use(cors({
-  origin: process.end.API_URL, // your deployed frontend
+  origin: process.env.API_URL, // your deployed frontend
   credentials: true, // important for cookies/auth headers
 }));
 app.options('*', cors({
-  origin:  process.end.API_URL,
+  origin:  process.env.API_URL,
   credentials: true
 }));
 
