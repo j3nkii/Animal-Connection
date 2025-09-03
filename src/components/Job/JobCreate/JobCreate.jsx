@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import "./JobCreate.css";
 import Stack from "@mui/material/Stack";
