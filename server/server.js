@@ -46,7 +46,10 @@ app.use(passport.session());
 
 
 
-
+app.use((req, res, next) => {
+  console.log('Cookies:', req.headers.cookie);
+  next();
+});
 /* Routes */
 app.use('/api/user', userRouter);
 app.use('/api/animal', animalRouter);
