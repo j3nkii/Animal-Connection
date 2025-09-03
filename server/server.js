@@ -31,8 +31,19 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
 // CORS <- needed for render deployment
-app.use(cors());
+app.use(cors({
+  origin: process.end.API_URL, // your deployed frontend
+  credentials: true, // important for cookies/auth headers
+}));
+app.options('*', cors({
+  origin: 'https://your-react-app-domain.com',
+  credentials: true
+}));
+
+
 
 /* Routes */
 app.use('/api/user', userRouter);
