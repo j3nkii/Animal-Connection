@@ -39,7 +39,7 @@ app.use(cors({
   credentials: true, // important for cookies/auth headers
 }));
 app.options('*', cors({
-  origin: 'https://your-react-app-domain.com',
+  origin:  process.end.API_URL,
   credentials: true
 }));
 
