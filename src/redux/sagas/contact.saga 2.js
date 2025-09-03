@@ -1,10 +1,10 @@
-import axios from "axios";
+import { api } from './axiosService.js';
 import { put, takeLatest } from 'redux-saga/effects';
 
 
 function* fetchContacts() {
     try {
-        const response = yield axios.get(`/api/contact`);
+        const response = yield api.get(`/api/contact`);
         yield put({ type: 'SET_CONTACTS', payload: response.data });
     }
     catch (error) {
@@ -14,7 +14,7 @@ function* fetchContacts() {
 
 function* addContacts(action) {
     try {
-        yield axios.post(`/api/contact`, action.payload);
+        yield api.post(`/api/contact`, action.payload);
         yield put({ type: 'FETCH_CONTACTS',});
     }
     catch (error) {

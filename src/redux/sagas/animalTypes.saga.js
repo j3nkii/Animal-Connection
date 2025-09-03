@@ -1,9 +1,9 @@
-import axios from "axios";
+import { api } from './axiosService.js';
 import { put, takeLatest } from 'redux-saga/effects';
 
 function* fetchAnimalTypes() {
     try {
-        const response = yield axios.get(`/api/types`);
+        const response = yield api.get(`/api/types`);
         yield put({ type: 'SET_ANIMAL_TYPES', payload: response.data });
     }
     catch (error) {

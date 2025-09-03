@@ -1,9 +1,9 @@
-import axios from "axios";
+import { api } from './axiosService.js';
 import { put, takeLatest } from "redux-saga/effects";
 
 function* addPhoto(action) {
   try {
-    yield axios.put("/api/images", action.payload.formData);
+    yield api.put("/api/images", action.payload.formData);
     yield put({
       type: "FETCH_SELECTED_ANIMAL",
       payload: { id: action.payload.animal.id },

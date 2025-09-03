@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from './axiosService.js';
 import { put, takeLatest } from "redux-saga/effects";
 
 function* filterAnimals(action) {
@@ -8,7 +8,7 @@ function* filterAnimals(action) {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     };
-    const response = yield axios.get(`/api/animal`, { params: qFilter });
+    const response = yield api.get(`/api/animal`, { params: qFilter });
     yield put({ type: "SET_ANIMALS", payload: response.data });
   } catch (error) {
     console.log("User get request failed", error);
@@ -17,7 +17,7 @@ function* filterAnimals(action) {
 
 function* fetchAnimals() {
   try {
-    const response = yield axios.get(`/api/animal`);
+    const response = yield api.get(`/api/animal`);
     yield put({ type: "SET_ANIMALS", payload: response.data });
   } catch (error) {
     console.error("fetchAnimals failed", error);
@@ -26,7 +26,7 @@ function* fetchAnimals() {
 
 function* fetchSelectedAnimal(action) {
   try {
-    const response = yield axios.get(`/api/animal/${action.payload.id}`);
+    const response = yield api.get(`/api/animal/${action.payload.id}`);
     yield put({ type: "SET_SELECTED_ANIMAL", payload: response.data });
   } catch (error) {
     console.error("fetchSelectedAnimal failed", error);
@@ -36,7 +36,7 @@ function* fetchSelectedAnimal(action) {
 // Add an animal to a job
 function* addAnimalToJob(action) {
   try {
-    yield axios.post(`/api/animal/job`, action.payload);
+    yield api.post(`/api/animal/job`, action.payload);
     yield put({
       type: "FETCH_SELECTED_ANIMAL",
       payload: { id: action.payload.animalId },
@@ -49,7 +49,7 @@ function* addAnimalToJob(action) {
 // Update an animal's training info
 function* updateAnimalTraining(action) {
   try {
-    const response = yield axios.put(
+    const response = yield api.put(
       `/api/animal/${action.payload.id}/training`,
       action.payload
     );
@@ -65,7 +65,7 @@ function* updateAnimalTraining(action) {
 // Update an animal's summary info
 function* updateAnimalSummary(action) {
   try {
-    const response = yield axios.put(
+    const response = yield api.put(
       `/api/animal/${action.payload.id}/summary`,
       action.payload
     );
@@ -80,7 +80,7 @@ function* updateAnimalSummary(action) {
 
 function* addNewAnimal(action) {
   try {
-    yield axios.post(`/api/animal`, action.payload.formData);
+    yield api.post(`/api/animal`, action.payload.formData);
     yield put({ type: 'FETCH_SELECTED_CONTACT', payload: action.payload.id });
   } catch (error) {
     console.error("POST animal failed", error);
@@ -90,7 +90,7 @@ function* addNewAnimal(action) {
 // Delete an animal from the database
 function* deleteAnimal(action) {
   try {
-    const response = yield axios.delete(`/api/animal/${action.payload.id}`);
+    const response = yield api.delete(`/api/animal/${action.payload.id}`);
     yield put({ type: "FETCH_ANIMALS" });
   } catch (error) {
     console.error("deleteAnimal failed", error);

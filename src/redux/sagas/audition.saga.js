@@ -1,10 +1,10 @@
-import axios from "axios";
+import { api } from './axiosService.js';
 import { put, takeLatest } from 'redux-saga/effects';
 
 // Post an audition
 function* addAudition(action) {
     try {
-        const response = yield axios.post(`/api/audition`, action.payload);
+        const response = yield api.post(`/api/audition`, action.payload);
         yield put({ type: 'FETCH_SELECTED_ANIMAL', payload: {id: action.payload.id }});
     }
     catch (error) {
@@ -15,7 +15,7 @@ function* addAudition(action) {
 // Delete an audition
 function* deleteAudition(action) {
     try {
-        const response = yield axios.delete(`/api/audition/${action.payload.id}`);
+        const response = yield api.delete(`/api/audition/${action.payload.id}`);
         yield put({ type: 'FETCH_SELECTED_ANIMAL', payload: {id: action.payload.animalsId }});
     }
     catch (error) {

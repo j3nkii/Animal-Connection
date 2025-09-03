@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from './axiosService.js';
 import { put, takeLatest } from "redux-saga/effects";
 
 // worker Saga: will be fired on "FETCH_USER" actions
@@ -9,7 +9,7 @@ function* filterJobs(action) {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     };
-    const response = yield axios.get(`/api/job`, { params: thing }); //<<<<<<<<<<<<<<<<<<<<<<<<<issue?
+    const response = yield api.get(`/api/job`, { params: thing }); //<<<<<<<<<<<<<<<<<<<<<<<<<issue?
     yield put({ type: "SET_JOBS", payload: response.data });
   } catch (error) {
     console.log("User get request failed", error);
@@ -18,7 +18,7 @@ function* filterJobs(action) {
 
 function* fetchJobs() {
   try {
-    const response = yield axios.get(`/api/job`);
+    const response = yield api.get(`/api/job`);
     yield put({ type: "SET_JOBS", payload: response.data });
   } catch (error) {
     console.error("fetchJobs failed", error);
@@ -27,7 +27,7 @@ function* fetchJobs() {
 
 function* addJob(action) {
   try {
-    yield axios.post(`/api/job`, action.payload);
+    yield api.post(`/api/job`, action.payload);
     yield put({ type: "FETCH_JOBS" });
   } catch (error) {
     console.error("fetchJobs failed", error);
@@ -36,7 +36,7 @@ function* addJob(action) {
 
 function* fetchJobDetails(action) {
   try {
-    const response = yield axios.get(`/api/job/${action.payload}`);
+    const response = yield api.get(`/api/job/${action.payload}`);
     yield put({ type: "SET_SELECTED_JOB_DETAILS", payload: response.data }); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   } catch (error) {
     console.error("fetchJobDetails failed", error);
@@ -46,7 +46,7 @@ function* fetchJobDetails(action) {
 function* fetchSelectedJobContacts(action) {
   //<<<<<<<<<<<<<<<<<<<<
   try {
-    const response = yield axios.get(`/api/job/contacts/${action.payload}`);
+    const response = yield api.get(`/api/job/contacts/${action.payload}`);
     yield put({ type: "SET_SELECTED_JOB_CONTACTS", payload: response.data }); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   } catch (error) {
     console.error("fetchJobDetails failed", error);
@@ -62,7 +62,7 @@ function* deleteJob(action) {
     // send the action.payload as the params
     // the config includes credentials which
     // allow the server session to recognize the user
-    yield axios.delete(`/api/job/${action.payload}`, config);
+    yield api.delete(`/api/job/${action.payload}`, config);
   } catch (error) {
     console.log("DELETE Job failed", error);
   }
@@ -77,7 +77,7 @@ function* finishJob(action) {
     // send the action.payload as the params
     // the config includes credentials which
     // allow the server session to recognize the user
-    yield axios.put(`/api/job/${action.payload}`, config);
+    yield api.put(`/api/job/${action.payload}`, config);
     yield put({ type: "FETCH_SELECTED_JOB", payload: action.payload });
     
   } catch (error) {
@@ -95,7 +95,7 @@ function* editSelectedJob(action) {
     // the config includes credentials which
     // allow the server session to recognize the user
     //send action.payload.project as params
-    yield axios.put(
+    yield api.put(
       `/api/job/edit/${action.payload.selectedJob}`,
       action.payload,
       config
@@ -116,7 +116,7 @@ function* editSelectedJobPay(action) {
     // the config includes credentials which
     // allow the server session to recognize the user
     //send action.payload.project as params
-    yield axios.put(
+    yield api.put(
       `/api/job/edit/pay/${action.payload.payDetails}`,
       action.payload,
       config
@@ -129,7 +129,7 @@ function* editSelectedJobPay(action) {
 
 function* fetchActiveJobs() {
   try {
-    const response = yield axios.get("/api/activejob");
+    const response = yield api.get("/api/activejob");
     yield put({ type: "SET_ACTIVE_JOBS", payload: response.data });
   } catch (error) {
     console.error("fetchActiveJobs failed", error);
@@ -138,7 +138,7 @@ function* fetchActiveJobs() {
 
 function* fetchSelectedJob(action) {
   try {
-    const response = yield axios.get(`/api/job/selectedJob/${action.payload}`);
+    const response = yield api.get(`/api/job/selectedJob/${action.payload}`);
     yield put({ type: "SET_SELECTED_JOB", payload: response.data[0] });
   } catch (error) {
     console.error("fetchJobs failed", error);
@@ -154,7 +154,7 @@ function* deleteJobPet(action) {
     // send the action.payload as the params
     // the config includes credentials which
     // allow the server session to recognize the user
-    yield axios.delete(`/api/job/pet/${action.payload.payDetail}`);
+    yield api.delete(`/api/job/pet/${action.payload.payDetail}`);
     yield put({
       type: "FETCH_JOB_DETAILS",
       payload: action.payload.selectedJob,
@@ -174,7 +174,7 @@ function* deleteJobContact(action) {
     // send the action.payload as the params
     // the config includes credentials which
     // allow the server session to recognize the user
-    yield axios.delete(`/api/job/contact/${action.payload.contact}`);
+    yield api.delete(`/api/job/contact/${action.payload.contact}`);
     yield put({type: "FETCH_SELECTED_JOB_CONTACTS", payload: action.payload.id
     });
   } catch (error) {
