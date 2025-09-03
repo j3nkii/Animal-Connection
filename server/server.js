@@ -5,6 +5,8 @@ require('dotenv').config();
 
 const app = express();
 
+app.set('trust proxy', 1); // Chatgpt i need this fro deploying to render
+
 
 const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
@@ -20,6 +22,17 @@ const imagesRouter = require('./routes/images.router');
 const csvRouter = require('./routes/csv.router');
 const animalTypesRouter = require('./routes/animalTypes.router');
 
+
+// CORS <- needed for render deployment
+app.use(cors({
+  origin: process.env.API_URL, // your deployed frontend
+  credentials: true, // important for cookies/auth headers
+}));
+app.options('*', cors({
+  origin:  process.env.API_URL,
+  credentials: true
+}));
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,17 +44,6 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
-// CORS <- needed for render deployment
-app.use(cors({
-  origin: process.env.API_URL, // your deployed frontend
-  credentials: true, // important for cookies/auth headers
-}));
-app.options('*', cors({
-  origin:  process.env.API_URL,
-  credentials: true
-}));
 
 
 
